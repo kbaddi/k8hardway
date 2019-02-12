@@ -50,3 +50,7 @@ resource "azurerm_virtual_machine" "example" {
     disable_password_authentication = false
   }
 }
+
+output "ipv4_addressess" {
+  value = ["${azurerm_public_ip.main.*.ip_address}"]
+}
