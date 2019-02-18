@@ -1,5 +1,5 @@
 provider "azurerm" {
-  version = "1.20.0"
+  version         = "1.20.0"
   subscription_id = "${var.susbcription_id}"
 }
 
@@ -10,7 +10,7 @@ data "template_file" "web_server" {
 }
 
 resource "azurerm_virtual_machine" "example" {
-  count = "${var.node_count}"
+  count                 = "${var.node_count}"
   name                  = "${var.virtual_machine_name}-${count.index}"
   location              = "${azurerm_resource_group.main.location}"
   resource_group_name   = "${azurerm_resource_group.main.name}"

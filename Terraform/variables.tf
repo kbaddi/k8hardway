@@ -8,6 +8,10 @@ variable "node_count" {}
 
 variable "virtual_machine_size" {}
 
+variable "inbound_port_ranges" {
+  type = "list"
+}
+
 variable "tags" {
   type = "map"
 
