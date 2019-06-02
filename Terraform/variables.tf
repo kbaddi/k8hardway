@@ -4,11 +4,23 @@ variable "admin_username" {}
 variable "admin_password" {}
 variable "prefix" {}
 variable "susbcription_id" {}
-variable "node_count" {}
 
-variable "virtual_machine_size" {}
+variable "master_node_count" {}
 
-variable "inbound_port_ranges" {
+variable "worker_node_count" {}
+
+variable "master_vm_size" {
+  description = "Size of the Master Node"
+}
+variable "worker_vm_size" {
+  description = "Size of the Worker Nodes"
+}
+
+variable "master_inbound_ports" {
+  type = "list"
+}
+
+variable "worker_inbound_ports" {
   type = "list"
 }
 

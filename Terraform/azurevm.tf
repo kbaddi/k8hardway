@@ -5,17 +5,17 @@ provider "azurerm" {
 
 #Fetch the Cloudinit (userdate) file
 
-data "template_file" "web_server" {
+data "template_file" "master" {
   template = "${file("${path.module}/Templates/cloudnint.tpl")}"
 }
 
-resource "azurerm_virtual_machine" "example" {
-  count                 = "${var.node_count}"
+resource "azurerm_virtual_machine" "master" {
+  count                 = "${var.master_node_count}"
   name                  = "${var.virtual_machine_name}-${count.index}"
-  location              = "${azurerm_resource_group.main.location}"
-  resource_group_name   = "${azurerm_resource_group.main.name}"
-  network_interface_ids = ["${element(azurerm_network_interface.main.*.id, count.index)}"]
-  vm_size               = "${var.virtual_machine_size}"
+  location              = "${azurerm_resource_group.k8hway.location}"
+  resource_group_name   = "${azurerm_resource_group.k8hway.name}"
+  network_interface_ids = ["${element(azurerm_network_interface.master.*.id, count.index)}"]
+  vm_size               = "${var.master_vm_size}"
 
   # This means the OS Disk will be deleted when Terraform destroys the Virtual Machine
   # NOTE: This may not be optimal in all cases.
@@ -28,7 +28,7 @@ resource "azurerm_virtual_machine" "example" {
   storage_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
-    sku       = "16.04-LTS"
+    sku       = "18.04-LTS"
     version   = "latest"
   }
 
@@ -43,7 +43,7 @@ resource "azurerm_virtual_machine" "example" {
     computer_name  = "${var.virtual_machine_name}-${count.index}"
     admin_username = "${var.admin_username}"
     admin_password = "${var.admin_password}"
-    custom_data    = "${data.template_file.web_server.rendered}"
+    custom_data    = "${data.template_file.master.rendered}"
   }
 
   os_profile_linux_config {
@@ -51,6 +51,6 @@ resource "azurerm_virtual_machine" "example" {
   }
 }
 
-output "ipv4_addressess" {
-  value = ["${azurerm_public_ip.main.*.ip_address}"]
-}
+// output "ipv4_addressess" {
+//   value = ["${azurerm_public_ip.main.*.ip_address}"]
+// }
