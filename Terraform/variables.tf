@@ -15,7 +15,9 @@ variable "master_vm_size" {
 variable "worker_vm_size" {
   description = "Size of the Worker Nodes"
 }
-
+variable "destination_ssh_key_path" {
+  description = "Path where ssh keys are copied in the vm. Only /home/<username>/.ssh/authorize_keys is accepted."
+}
 variable "master_inbound_ports" {
   type = "list"
 }

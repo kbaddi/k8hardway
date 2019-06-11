@@ -9,6 +9,10 @@ data "template_file" "master" {
   template = "${file("${path.module}/Templates/cloudnint.tpl")}"
 }
 
+data "template_file" "key_data" {
+  template = "${file("~/.ssh/id_rsa.pub")}"
+}
+
 resource "azurerm_virtual_machine" "master" {
   count                 = "${var.master_node_count}"
   name                  = "${var.virtual_machine_name}-${count.index}"
@@ -42,12 +46,17 @@ resource "azurerm_virtual_machine" "master" {
   os_profile {
     computer_name  = "${var.virtual_machine_name}-${count.index}"
     admin_username = "${var.admin_username}"
-    admin_password = "${var.admin_password}"
     custom_data    = "${data.template_file.master.rendered}"
   }
 
+
   os_profile_linux_config {
-    disable_password_authentication = false
+    disable_password_authentication = true
+    ssh_keys {
+      key_data       = "${data.template_file.key_data.rendered}"
+      path   = "${var.destination_ssh_key_path}"
+    }
+    
   }
 }
 

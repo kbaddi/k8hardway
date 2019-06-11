@@ -13,8 +13,8 @@ resource "azurerm_virtual_network" "k8hway" {
 
 }
 
-resource "azurerm_subnet" "external" {
-  name                 = "external"
+resource "azurerm_subnet" "public" {
+  name                 = "public"
   resource_group_name  = "${azurerm_resource_group.k8hway.name}"
   virtual_network_name = "${azurerm_virtual_network.k8hway.name}"
   address_prefix       = "10.0.1.0/24"
@@ -39,7 +39,7 @@ resource "azurerm_network_interface" "master" {
 
   ip_configuration {
     name                          = "configuration-${count.index}"
-    subnet_id                     = "${azurerm_subnet.external.id}"
+    subnet_id                     = "${azurerm_subnet.public.id}"
     private_ip_address_allocation = "dynamic"
     public_ip_address_id = "${element(azurerm_public_ip.master.*.id, count.index)}"
 
