@@ -1,0 +1,7 @@
+version: "3.7"
+services:
+  terraform:
+    build: ./
+    volumes:
+      - "./Terraform:/Terraform"
+    tty: true
