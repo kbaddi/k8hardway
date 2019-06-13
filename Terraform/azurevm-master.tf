@@ -6,7 +6,7 @@ provider "azurerm" {
 #Fetch the Cloudinit (userdate) file
 
 data "template_file" "master" {
-  template = "${file("${path.module}/Templates/cloudnint.tpl")}"
+  template = "${file("${path.module}/Templates/cloudnint-master.tpl")}"
 }
 
 data "template_file" "key_data" {
@@ -15,7 +15,7 @@ data "template_file" "key_data" {
 
 resource "azurerm_virtual_machine" "master" {
   count                 = "${var.master_node_count}"
-  name                  = "${var.virtual_machine_name}-${count.index}"
+  name                  = "${var.virtual_machine_name}-master-${count.index}"
   location              = "${azurerm_resource_group.k8hway.location}"
   resource_group_name   = "${azurerm_resource_group.k8hway.name}"
   network_interface_ids = ["${element(azurerm_network_interface.master.*.id, count.index)}"]
@@ -56,7 +56,7 @@ resource "azurerm_virtual_machine" "master" {
       key_data       = "${data.template_file.key_data.rendered}"
       path   = "${var.destination_ssh_key_path}"
     }
-    
+
   }
 }
 

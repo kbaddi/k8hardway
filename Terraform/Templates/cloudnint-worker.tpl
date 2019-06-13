@@ -6,17 +6,10 @@ sudo DEBIAN_FRONTEND="noninteractive" apt-get -y dist-upgrade
 
 sudo apt-get update -y
 sudo apt-get install apache2 -y
-myhost=`hostname`
-sudo echo -e "Hello! This is webserver named $myhost " >> /var/www/html/home.html
 
 
 
-<!-- sudo apt-get install python-pip software-properties-common -y
-sudo apt-add-repository ppa:ansible/ansible -y
-sudo apt-get update
-sudo apt-get install ansible -y
-
-sudo pip install docker-py
+sudo apt-get install python-pip software-properties-common -y
 
 sudo apt-get update
 sudo apt-get install \
@@ -49,6 +42,3 @@ EOF
 sudo apt-get update
 sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
-
-
- -->

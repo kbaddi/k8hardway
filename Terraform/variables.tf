@@ -30,7 +30,7 @@ variable "tags" {
   type = "map"
 
   default = {
-    name = "mywebapp"
+    name = "k8s"
   }
 
   description = "Any tags which should be assigned to the resources in this example"
