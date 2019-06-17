@@ -1,7 +1,6 @@
 variable "virtual_machine_name" {}
 variable "location" {}
 variable "admin_username" {}
-variable "admin_password" {}
 variable "prefix" {}
 variable "susbcription_id" {}
 
