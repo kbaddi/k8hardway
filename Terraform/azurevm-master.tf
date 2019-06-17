@@ -37,14 +37,14 @@ resource "azurerm_virtual_machine" "master" {
   }
 
   storage_os_disk {
-    name              = "${var.prefix}-${count.index}-osdisk"
+    name              = "${var.prefix}-${count.index}-master-osdisk"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
   }
 
   os_profile {
-    computer_name  = "${var.virtual_machine_name}-${count.index}"
+    computer_name  = "${var.virtual_machine_name}-master-${count.index}"
     admin_username = "${var.admin_username}"
     custom_data    = "${data.template_file.master.rendered}"
   }
