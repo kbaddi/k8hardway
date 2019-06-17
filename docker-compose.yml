@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+  terraform:
+    build: ./
+    volumes:
+      - "./Terraform:/Terraform"
+      - "/${HOME}/.ssh:/root/.ssh"
+    environment:
+      - APP_ID=${CLIENT_ID}
+      - PASSWORD=${CLIENT_SECRET}
+      - TENANT_ID=${TENANT_ID}
+      - PATH=/:${PATH}
+    tty: true
