@@ -1,7 +1,8 @@
 provider "azurerm" {
-  version         = "1.27.0"
-  subscription_id = "${var.susbcription_id}"
+    version = "=1.27.0"
+    subscription_id = "${var.susbcription_id}"
 }
+
 
 #Fetch the Cloudinit (userdate) file
 
