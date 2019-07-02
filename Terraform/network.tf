@@ -25,7 +25,7 @@ resource "azurerm_public_ip" "master" {
   name                         = "${var.prefix}-${count.index}-master-pip"
   resource_group_name          = "${azurerm_resource_group.k8hway.name}"
   location                     = "${azurerm_resource_group.k8hway.location}"
-  public_ip_address_allocation = "static"
+  allocation_method = "Static"
   sku                          = "Standard"
   tags                         = "${var.tags}"
 }
@@ -52,7 +52,7 @@ resource "azurerm_public_ip" "worker" {
   name                         = "${var.prefix}-${count.index}-worker-pip"
   resource_group_name          = "${azurerm_resource_group.k8hway.name}"
   location                     = "${azurerm_resource_group.k8hway.location}"
-  public_ip_address_allocation = "static"
+  allocation_method = "Static"
   sku                          = "Standard"
   tags                         = "${var.tags}"
 }

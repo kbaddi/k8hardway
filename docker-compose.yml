@@ -6,6 +6,9 @@ services:
       - "./Terraform:/Terraform"
       - "/${HOME}/.ssh:/root/.ssh"
     environment:
+      - CLIENT_ID=${ARM_CLIENT_ID}
+      - CLIENT_SECRET=${ARM_CLIENT_SECRET}
+      - TENANT_ID=${ARM_TENANT_ID}
       - SUBSCRIPTION_ID=${SUBSCRIPTION_ID}
       - PATH=/:${PATH}
     tty: true
