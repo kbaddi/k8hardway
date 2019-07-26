@@ -39,7 +39,7 @@ resource "azurerm_virtual_machine" "worker" {
   os_profile {
     computer_name  = "${var.virtual_machine_name}-worker-${count.index}"
     admin_username = "${var.admin_username}"
-    dmin_password = "${var.admin_password}"
+    admin_password = "${var.admin_password}"
     custom_data    = "${data.template_file.worker.rendered}"
   }
 

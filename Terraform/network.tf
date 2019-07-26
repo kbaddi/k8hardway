@@ -68,4 +68,5 @@ resource "azurerm_network_interface" "worker" {
     name                          = "configuration-${count.index}"
     subnet_id                     = "${azurerm_subnet.public.id}"
     private_ip_address_allocation = "Dynamic"
+  }  
 }
