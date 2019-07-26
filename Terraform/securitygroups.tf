@@ -21,7 +21,6 @@ resource "azurerm_network_security_rule" "master" {
   network_security_group_name = "${azurerm_network_security_group.master.name}"
 }
 
-
 # Security Group for Worker  Node
 resource "azurerm_network_security_group" "worker" {
   name                = "worker"

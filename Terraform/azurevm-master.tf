@@ -1,8 +1,7 @@
 provider "azurerm" {
-    version = "=1.27.0"
-    subscription_id = "${var.susbcription_id}"
+  version         = "=1.27.0"
+  subscription_id = "${var.susbcription_id}"
 }
-
 
 #Fetch the Cloudinit (userdate) file
 
@@ -47,17 +46,17 @@ resource "azurerm_virtual_machine" "master" {
   os_profile {
     computer_name  = "${var.virtual_machine_name}-master-${count.index}"
     admin_username = "${var.admin_username}"
+    admin_password = "${var.admin_password}"
     custom_data    = "${data.template_file.master.rendered}"
   }
 
-
   os_profile_linux_config {
-    disable_password_authentication = true
-    ssh_keys {
-      key_data       = "${data.template_file.key_data.rendered}"
-      path   = "${var.destination_ssh_key_path}"
-    }
+    disable_password_authentication = false
 
+    ssh_keys {
+      key_data = "${data.template_file.key_data.rendered}"
+      path     = "${var.destination_ssh_key_path}"
+    }
   }
 }
 

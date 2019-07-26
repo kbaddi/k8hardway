@@ -21,13 +21,13 @@ resource "azurerm_subnet" "public" {
 
 # NIC and IPs for Master Node
 resource "azurerm_public_ip" "master" {
-  count                        = "${var.master_node_count}"
-  name                         = "${var.prefix}-${count.index}-master-pip"
-  resource_group_name          = "${azurerm_resource_group.k8hway.name}"
-  location                     = "${azurerm_resource_group.k8hway.location}"
-  allocation_method = "Static"
-  sku                          = "Standard"
-  tags                         = "${var.tags}"
+  count               = "${var.master_node_count}"
+  name                = "${var.prefix}-${count.index}-master-pip"
+  resource_group_name = "${azurerm_resource_group.k8hway.name}"
+  location            = "${azurerm_resource_group.k8hway.location}"
+  allocation_method   = "Dynamic"
+  sku                 = "Basic"
+  tags                = "${var.tags}"
 }
 
 resource "azurerm_network_interface" "master" {
@@ -41,21 +41,21 @@ resource "azurerm_network_interface" "master" {
     name                          = "configuration-${count.index}"
     subnet_id                     = "${azurerm_subnet.public.id}"
     private_ip_address_allocation = "dynamic"
-    public_ip_address_id          = "${element(azurerm_public_ip.master.*.id, count.index)}"
+    # public_ip_address_id          = "${element(azurerm_public_ip.master.*.id, count.index)}"
   }
 }
 
 # NIC and IPs for Worker Nodes
 
-resource "azurerm_public_ip" "worker" {
-  count                        = "${var.worker_node_count}"
-  name                         = "${var.prefix}-${count.index}-worker-pip"
-  resource_group_name          = "${azurerm_resource_group.k8hway.name}"
-  location                     = "${azurerm_resource_group.k8hway.location}"
-  allocation_method = "Static"
-  sku                          = "Standard"
-  tags                         = "${var.tags}"
-}
+// resource "azurerm_public_ip" "worker" {
+//   count               = "${var.worker_node_count}"
+//   name                = "${var.prefix}-${count.index}-worker-pip"
+//   resource_group_name = "${azurerm_resource_group.k8hway.name}"
+//   location            = "${azurerm_resource_group.k8hway.location}"
+//   allocation_method   = "Dynamic"
+//   sku                 = "Basic"
+//   tags                = "${var.tags}"
+// }
 
 resource "azurerm_network_interface" "worker" {
   count                     = "${var.worker_node_count}"
@@ -67,7 +67,5 @@ resource "azurerm_network_interface" "worker" {
   ip_configuration {
     name                          = "configuration-${count.index}"
     subnet_id                     = "${azurerm_subnet.public.id}"
-    private_ip_address_allocation = "dynamic"
-    public_ip_address_id          = "${element(azurerm_public_ip.worker.*.id, count.index)}"
-  }
+    private_ip_address_allocation = "Dynamic"
 }
