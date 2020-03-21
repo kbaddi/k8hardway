@@ -2,43 +2,55 @@
 
 resource "azurerm_network_security_group" "master" {
   name                = "master"
-  location            = "${azurerm_resource_group.k8hway.location}"
-  resource_group_name = "${azurerm_resource_group.k8hway.name}"
+  location            = azurerm_resource_group.k8hway.location
+  resource_group_name = azurerm_resource_group.k8hway.name
 }
 
 resource "azurerm_network_security_rule" "master" {
-  count                       = "${length(var.master_inbound_ports)}"
+  count                       = length(var.master_inbound_ports)
   name                        = "sgrule-master-${count.index}"
   direction                   = "Inbound"
   access                      = "Allow"
-  priority                    = "${(100 * (count.index + 1))}"
+  priority                    = 100 * (count.index + 1)
   source_address_prefix       = "*"
   source_port_range           = "*"
   destination_address_prefix  = "*"
-  destination_port_range      = "${element(var.master_inbound_ports, count.index)}"
+  destination_port_range      = element(var.master_inbound_ports, count.index)
   protocol                    = "TCP"
-  resource_group_name         = "${azurerm_resource_group.k8hway.name}"
-  network_security_group_name = "${azurerm_network_security_group.master.name}"
+  resource_group_name         = azurerm_resource_group.k8hway.name
+  network_security_group_name = azurerm_network_security_group.master.name
 }
+
+resource "azurerm_subnet_network_security_group_association" "master" {
+  subnet_id = azurerm_subnet.master.id
+  network_security_group_id = azurerm_network_security_group.master.id
+}
+
+# Associate Master NSG To master subnet
 
 # Security Group for Worker  Node
 resource "azurerm_network_security_group" "worker" {
   name                = "worker"
-  location            = "${azurerm_resource_group.k8hway.location}"
-  resource_group_name = "${azurerm_resource_group.k8hway.name}"
+  location            = azurerm_resource_group.k8hway.location
+  resource_group_name = azurerm_resource_group.k8hway.name
 }
 
 resource "azurerm_network_security_rule" "worker" {
-  count                       = "${length(var.worker_inbound_ports)}"
+  count                       = length(var.worker_inbound_ports)
   name                        = "sgrule-worker-${count.index}"
   direction                   = "Inbound"
   access                      = "Allow"
-  priority                    = "${(100 * (count.index + 1))}"
+  priority                    = 100 * (count.index + 1)
   source_address_prefix       = "*"
   source_port_range           = "*"
   destination_address_prefix  = "*"
-  destination_port_range      = "${element(var.worker_inbound_ports, count.index)}"
+  destination_port_range      = element(var.worker_inbound_ports, count.index)
   protocol                    = "TCP"
-  resource_group_name         = "${azurerm_resource_group.k8hway.name}"
-  network_security_group_name = "${azurerm_network_security_group.worker.name}"
+  resource_group_name         = azurerm_resource_group.k8hway.name
+  network_security_group_name = azurerm_network_security_group.worker.name
+}
+
+resource "azurerm_subnet_network_security_group_association" "worker" {
+  subnet_id = azurerm_subnet.worker.id
+  network_security_group_id = azurerm_network_security_group.worker.id
 }

@@ -1,25 +1,20 @@
-provider "azurerm" {
-  version         = "=1.27.0"
-  subscription_id = "${var.susbcription_id}"
-}
-
 #Fetch the Cloudinit (userdate) file
 
 data "template_file" "master" {
-  template = "${file("${path.module}/Templates/cloudnint-master.tpl")}"
+  template = file("${path.module}/Templates/cloudnint-master.tpl")
 }
 
 data "template_file" "key_data" {
-  template = "${file("~/.ssh/id_rsa.pub")}"
+  template = file("~/.ssh/id_rsa.pub")
 }
 
 resource "azurerm_virtual_machine" "master" {
-  count                 = "${var.master_node_count}"
-  name                  = "${var.virtual_machine_name}-master-${count.index}"
-  location              = "${azurerm_resource_group.k8hway.location}"
-  resource_group_name   = "${azurerm_resource_group.k8hway.name}"
-  network_interface_ids = ["${element(azurerm_network_interface.master.*.id, count.index)}"]
-  vm_size               = "${var.master_vm_size}"
+  count                 = var.master_node_count
+  name                  = "${var.prefix}-master-${count.index}"
+  location              = azurerm_resource_group.k8hway.location
+  resource_group_name   = azurerm_resource_group.k8hway.name
+  network_interface_ids = [element(azurerm_network_interface.master.*.id, count.index)]
+  vm_size               = var.master_vm_size
 
   # This means the OS Disk will be deleted when Terraform destroys the Virtual Machine
   # NOTE: This may not be optimal in all cases.
@@ -44,22 +39,19 @@ resource "azurerm_virtual_machine" "master" {
   }
 
   os_profile {
-    computer_name  = "${var.virtual_machine_name}-master-${count.index}"
-    admin_username = "${var.admin_username}"
-    admin_password = "${var.admin_password}"
-    custom_data    = "${data.template_file.master.rendered}"
+    computer_name  = "${var.prefix}-master-${count.index}"
+    admin_username = var.admin_username
+    custom_data    = data.template_file.master.rendered
   }
 
   os_profile_linux_config {
-    disable_password_authentication = false
+    disable_password_authentication = true
 
     ssh_keys {
-      key_data = "${data.template_file.key_data.rendered}"
-      path     = "${var.destination_ssh_key_path}"
+      key_data = data.template_file.key_data.rendered
+      path     = var.destination_ssh_key_path
     }
   }
 }
 
-// output "ipv4_addressess" {
-//   value = ["${azurerm_public_ip.main.*.ip_address}"]
-// }
+

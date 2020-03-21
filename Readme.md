@@ -26,7 +26,14 @@ then use docker exec to connect to the container
 
 ## Running Terraform
 
-Once you attach to the container, cd into Terraform folder
+Once you attach to the container, cd into Terraform folder:
+
+export ARM_CLIENT_ID=<Azure_CLIENT_ID>
+export ARM_CLIENT_SECRET=<Azure_CLIENT_SECRET>
+export ARM_SUBSCRIPTION_ID=<Azure_Subscription_ID>
+export ARM_TENANT_ID=<Azure_Tenant_ID>
+
+
 `cd Terraform`
 Initialize Terraform
 `terraform init`
